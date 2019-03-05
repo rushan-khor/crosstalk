@@ -47,4 +47,4 @@ if __name__ == '__main__':
     # print(CONSOLE_BULLET, 'Set webhook response:\t\t', set_webhook())
     # print(CONSOLE_BULLET, 'Delete webhook response:\t', delete_webhook())
     print(CONSOLE_BULLET, 'Webhook info response:\t', get_webhook_info())
-    print(CONSOLE_BULLET, 'New key generated:\t\t', generate_secret_key())
+    # print(CONSOLE_BULLET, 'New key generated:\t\t', generate_secret_key())
