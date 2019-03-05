@@ -3,6 +3,8 @@ import os
 from flask import Flask, jsonify, request
 from werkzeug.http import HTTP_STATUS_CODES
 
+from crosstalk_telegram_bot import handle_update
+
 WEBHOOK_SECRET_KEY = os.environ['WEBHOOK_SECRET_KEY']
 
 app = Flask(__name__)
@@ -10,7 +12,7 @@ app = Flask(__name__)
 
 @app.route("/" + WEBHOOK_SECRET_KEY, methods=['POST'])
 def handle_webhook():
-    print(request)
+    handle_update(update=request.get_json())
     return jsonify({'ok': True})
 
 
