@@ -35,10 +35,10 @@ if __name__ == '__main__':
     print(CONSOLE_TITLE_DIVIDER + 'TELEGRAM ADMIN')
     print(CONSOLE_BULLET, 'Telegram bot token:\t', TOKEN)
     print(CONSOLE_BULLET, 'Telegram API URL:\t\t', TELEGRAM_API_URL)
-    print(CONSOLE_BULLET, 'Webhook secret key:\t', WEBHOOK_SECRET_KEY)
-    print(CONSOLE_BULLET, 'Webhook URL:\t\t\t', WEBHOOK_URL)
 
     print(CONSOLE_TITLE_DIVIDER + 'WEBHOOK ADMIN')
+    print(CONSOLE_BULLET, 'Webhook secret key:\t', WEBHOOK_SECRET_KEY)
+    print(CONSOLE_BULLET, 'Webhook URL:\t\t\t', WEBHOOK_URL)
     # print(CONSOLE_BULLET, 'Set webhook response:\t\t', set_webhook())
     # print(CONSOLE_BULLET, 'Delete webhook response:\t', delete_webhook())
     # print(CONSOLE_BULLET, 'New key generated:\t\t', generate_secret_key())
