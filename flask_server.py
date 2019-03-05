@@ -27,6 +27,6 @@ def handle_error(error):
     return jsonify({
         'ok': False,
         'error_code': error.code,
-        'reason_phrase': HTTP_STATUS_CODES[error.code],
-        'description': error.description
+        'error_reason_phrase': HTTP_STATUS_CODES[error.code],
+        'error_description': error.description
     }), error.code
