@@ -5,7 +5,7 @@ from werkzeug.http import HTTP_STATUS_CODES
 
 from crosstalk_telegram_bot import handle_update
 
-WEBHOOK_SECRET_KEY = os.environ['WEBHOOK_SECRET_KEY']
+WEBHOOK_SECRET_KEY = os.environ['TELEGRAM_WEBHOOK_KEY']
 
 app = Flask(__name__)
 

@@ -7,15 +7,15 @@ import requests
 TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 TELEGRAM_API_URL = f'https://api.telegram.org/bot{TOKEN}/'
 
-WEBHOOK_SECRET_KEY = os.environ['WEBHOOK_SECRET_KEY']
-WEBHOOK_URL = os.environ['WEBHOOK_HOSTNAME'] + WEBHOOK_SECRET_KEY
+WEBHOOK_SECRET_KEY = os.environ['TELEGRAM_WEBHOOK_KEY']
+WEBHOOK_URL = os.environ['TELEGRAM_WEBHOOK_HOSTNAME'] + WEBHOOK_SECRET_KEY
 
 CONSOLE_TITLE_DIVIDER = '\n'
 CONSOLE_BULLET = '*'
 
 
 def set_webhook():
-    r = requests.get(TELEGRAM_API_URL + 'setWebhook', data={'url': WEBHOOK_URL})
+    r = requests.get(TELEGRAM_API_URL + 'setWebhook', json={'url': WEBHOOK_URL})
     return r.json()
 
 
@@ -37,7 +37,7 @@ def generate_secret_key():
 
 
 if __name__ == '__main__':
-    print(CONSOLE_TITLE_DIVIDER + 'TELEGRAM ADMIN')
+    print(CONSOLE_TITLE_DIVIDER + 'TELEGRAM BOT ADMIN')
     print(CONSOLE_BULLET, 'Telegram bot token:\t', TOKEN)
     print(CONSOLE_BULLET, 'Telegram API URL:\t\t', TELEGRAM_API_URL)
 

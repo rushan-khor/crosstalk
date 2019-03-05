@@ -1,5 +1,5 @@
-import requests
+from crosstalk_slack_bot import send_message
 
 
 def handle_update(update):
-    print(update)
+    send_message(update['message']['text'])
