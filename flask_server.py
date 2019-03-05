@@ -17,7 +17,7 @@ def handle_webhook():
 
 
 @app.errorhandler(Exception)
-def handle_error(error):
+def handle_all_errors(error):
     if not error.code:
         error.code = 500
 
