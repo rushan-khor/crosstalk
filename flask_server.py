@@ -25,8 +25,8 @@ def handle_update(update=None):
         handle_message(message=update['message'], is_edited=True)
     elif 'message' in update:
         handle_message(message=update['message'], is_edited=False)
-
-    raise KeyError(f'No message found in Telegram update {update}.')
+    else:
+        raise KeyError(f'No message found in Telegram update {update}.')
 
 
 @app.errorhandler(Exception)
