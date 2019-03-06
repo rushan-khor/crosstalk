@@ -21,14 +21,20 @@ def handle_edited_message(message):
 
 
 def get_user_intent(message, is_edited=False):
-    from_user_display_name = message['from']['first_name']
+    from_user = message['from']['first_name']
 
     if is_edited:
-        return f':pencil2: _{from_user_display_name} edited a message to say_:'
+        return f':pencil2: _{from_user} edited a message to say_:'
     elif 'reply_to_message' in message:
         preceding_message = message['reply_to_message']
 
         preceding_user = preceding_message['from'].get('first_name', 'an unknown user')
+
+        if preceding_user == from_user:
+            preceding_user = 'their own'
+        else:
+            preceding_user += '\'s'
+
         preceding_message_type = get_message_content_type(preceding_message).replace('_', ' ')
         preceding_text = get_message_text_or_caption(preceding_message)
 
@@ -36,17 +42,23 @@ def get_user_intent(message, is_edited=False):
             preceding_text = preceding_text[0:19] + '...'
 
         if preceding_text is BLANK_MESSAGE_PLACEHOLDER:
-            return (f':mailbox: _{from_user_display_name} '
-                    f'replied to {preceding_user}\'s {preceding_message_type}_:')
+            return (f':mailbox: _{from_user} '
+                    f'replied to {preceding_user} {preceding_message_type}_:')
         else:
-            return (f':mailbox: _{from_user_display_name} '
-                    f'replied to {preceding_user}\'s {preceding_message_type} '
+            return (f':mailbox: _{from_user} '
+                    f'replied to {preceding_user} {preceding_message_type} '
                     f'"{preceding_text}"_:')
     elif 'forward_from' in message:
         preceding_user = message['forward_from'].get('first_name', 'an unknown user')
-        return f':arrow_right: _{from_user_display_name} forwarded {preceding_user}\'s message_:'
+
+        if preceding_user is from_user:
+            preceding_user = 'their own'
+        else:
+            preceding_user += '\'s'
+
+        return f':arrow_right: _{from_user} forwarded {preceding_user} message_:'
     else:
-        return f':speech_balloon: _{from_user_display_name} says_:'
+        return f':speech_balloon: _{from_user} says_:'
 
 
 def get_message_text_or_caption(message):
