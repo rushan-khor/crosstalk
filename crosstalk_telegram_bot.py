@@ -10,10 +10,11 @@ def handle_message(message, is_edited=False):
 
     if 'from' not in message:
         raise KeyError(f'No from key found in Telegram message {message}.')
-    else:
-        user_intent = get_user_intent(message=message, is_edited=is_edited)
 
-    send_message(user_intent)
+    user_intent = get_user_intent(message=message, is_edited=is_edited)
+    message_text = get_message_text_or_caption(message)
+
+    send_message(context=user_intent, text=message_text, photo_url=None, )
 
 
 def handle_edited_message(message):
@@ -36,7 +37,11 @@ def get_user_intent(message, is_edited=False):
             preceding_user += '\'s'
 
         preceding_message_type = get_message_content_type(preceding_message).replace('_', ' ')
-        preceding_text = get_message_text_or_caption(preceding_message)
+
+        if preceding_message_type is 'sticker':
+            preceding_text = preceding_message['sticker']['emoji']
+        else:
+            preceding_text = get_message_text_or_caption(preceding_message)
 
         if len(preceding_text) > 20:
             preceding_text = preceding_text[0:19] + '...'

@@ -5,16 +5,16 @@ import requests
 SLACK_BOT_WEBHOOK = os.environ['SLACK_BOT_WEBHOOK']
 
 
-def send_message(user_intent):
+def send_message(context, text=None, photo_url=None, download_url=None):
     payload = {
-        "text": user_intent,
+        "text": context,
         "blocks": [
             {
                 "type": "context",
                 "elements": [
                     {
                         "type": "mrkdwn",
-                        "text": user_intent
+                        "text": context
                     }
                 ]
             },
@@ -22,7 +22,7 @@ def send_message(user_intent):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": user_intent,
+                    "text": context,
                 }
             },
         ]
