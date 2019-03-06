@@ -39,7 +39,10 @@ def handle_exception(unknown_exception):
         builtin_exception_description = f'{type(unknown_exception).__name__}: {str(unknown_exception)}'
         http_exception = exceptions.InternalServerError(description=builtin_exception_description)
 
-    log_record = f'<{http_exception.code} {http.HTTP_STATUS_CODES[http_exception.code]}> {http_exception.description}'
-    app.logger.error(log_record)
+    app.logger.error(
+        f'<{http_exception.code} '
+        f'{http.HTTP_STATUS_CODES[http_exception.code]}> '
+        f'{http_exception.description}'
+    )
 
     return jsonify({'ok': True})
