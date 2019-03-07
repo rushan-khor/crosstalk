@@ -20,10 +20,10 @@ def handle_message(message, is_edited=False):
         raise KeyError(f'No from key found in Telegram message {message}.')
 
     user_intent = get_user_intent(message=message, is_edited=is_edited)
-    message_text = get_message_text(message)
+    message_text = get_pretty_message_text(message)
 
-    thumbnail_url = message_thumbnail_url(message)
-    download_url = message_download_button_url(message)
+    thumbnail_url = get_message_thumbnail_url(message)
+    download_url = get_message_download_button_url(message)
 
     send_message(context=user_intent, text=message_text, thumbnail_url=thumbnail_url, download_url=download_url)
 
@@ -107,7 +107,7 @@ def get_original_message_user_intent(message):
         return f':page_facing_up: _{from_user} sent a {message_type}_:'
 
 
-def get_message_text(message):
+def get_pretty_message_text(message):
     if get_message_content_type(message) == 'sticker':
         return message['sticker']['emoji']
 
@@ -126,7 +126,7 @@ def message_is_single_photo_type(message):
         return False
 
 
-def message_thumbnail_url(message):
+def get_message_thumbnail_url(message):
     try:
         photo_mime_type_prefix = 'image/'
 
@@ -139,7 +139,7 @@ def message_thumbnail_url(message):
         return None
 
 
-def message_download_button_url(message):
+def get_message_download_button_url(message):
     message_type = get_message_content_type(message)
     valid_message_types = 'audio document video voice video_note contact'.split()
 
