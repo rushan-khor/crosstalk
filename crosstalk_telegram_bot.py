@@ -93,18 +93,34 @@ def get_original_message_user_intent(message):
     from_user = message['from']['first_name']
     message_type = get_pretty_message_content_type(message)
 
-    if message_type == 'message':
-        return f':speech_balloon: _{from_user} says_:'
+    if get_pretty_message_text(message) == '/start':
+        return f':zap: _{from_user} has started using Crosstalk!_'
+    elif message.get('group_chat_created', False):
+        new_group_name = message['chat']['title']
+        return f':cookie: _{from_user} has created a new group called "{new_group_name}"!_'
+    elif message.get('left_chat_member', False):
+        left_user = message['left_chat_member']['first_name']
+        return f':wave: _{from_user} has removed {left_user} from the group._'
+    elif message.get('new_chat_members', False):
+        try:
+            new_member_name = message['new_chat_member']['first_name']
+        except KeyError:
+            new_member_name = 'new members'
+        return f':hugging_face: _{from_user} has added {new_member_name} to the group!_'
+    elif message_type == 'message':
+        return f':speech_balloon: _{from_user} says:_'
     elif message_type == 'photo':
-        return f':cityscape: _{from_user} sent a {message_type}_:'
+        return f':cityscape: _{from_user} sent a {message_type}:_'
+    elif message_type == 'photos':
+        return f':world_map: _{from_user} sent a couple of {message_type}:_'
     elif message_type == 'audio clip' or message_type == 'voice recording':
-        return f':microphone: _{from_user} sent a {message_type}_:'
+        return f':microphone: _{from_user} sent a {message_type}:_'
     elif message_type == 'video' or message_type == 'video note':
-        return f':clapper: _{from_user} sent a {message_type}_:'
+        return f':clapper: _{from_user} sent a {message_type}:_'
     elif message_type == 'sticker':
-        return f':fire: _{from_user} sent a {message_type}_:'
+        return f':fire: _{from_user} sent a {message_type}:_'
     else:
-        return f':page_facing_up: _{from_user} sent a {message_type}_:'
+        return f':page_facing_up: _{from_user} sent a {message_type}:_'
 
 
 def get_pretty_message_text(message):
@@ -167,7 +183,9 @@ def get_url_from_file_id(file_id):
 def get_pretty_message_content_type(message):
     message_type = get_message_content_type(message)
 
-    if message_type == 'audio':
+    if message_type == 'photo':
+        return 'photos'
+    elif message_type == 'audio':
         return 'audio clip'
     elif message_type == 'voice':
         return 'voice recording'
