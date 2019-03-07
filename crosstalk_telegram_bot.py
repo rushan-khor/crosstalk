@@ -11,6 +11,8 @@ BOT_TOKEN = environ['TELEGRAM_BOT_TOKEN']
 TELEGRAM_API_BASE_URL = f'{TELEGRAM_BASE_URL}/bot{BOT_TOKEN}/'
 TELEGRAM_API_BASE_FILE_URL = f'{TELEGRAM_BASE_URL}/file/bot{BOT_TOKEN}/'
 
+MESSAGE_TYPE_CHECK_ORDER = 'document sticker video_note voice audio video photo'.split()
+
 
 def handle_message(message, is_edited=False):
     if DEBUG_MODE:
@@ -224,32 +226,7 @@ def get_pretty_message_type(message):
 
 
 def get_message_type(message):
-    if message.get('audio'):
-        return 'audio'
-    elif message.get('document'):
-        return 'document'
-    elif message.get('animation'):
-        pass
-    elif message.get('game'):
-        pass
-    elif message.get('photo'):
-        return 'photo'
-    elif message.get('sticker'):
-        return 'sticker'
-    elif message.get('video'):
-        return 'video'
-    elif message.get('voice'):
-        return 'voice'
-    elif message.get('video_note'):
-        return 'video_note'
-    elif message.get('contact'):
-        return 'contact'
-    elif message.get('location'):
-        return 'location'
-    elif message.get('venue'):
-        pass
-    elif message.get('invoice'):
-        pass
-    elif message.get('successful_payment'):
-        pass
+    for message_type in MESSAGE_TYPE_CHECK_ORDER:
+        if message.get(message_type):
+            return message_type
     return 'message'
