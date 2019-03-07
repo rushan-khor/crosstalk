@@ -65,7 +65,7 @@ def get_reply_message_user_intent(message):
     else:
         preceding_user += '\'s'
 
-    preceding_message_type = get_pretty_message_content_type(preceding_message)
+    preceding_message_type = get_pretty_message_type(preceding_message)
 
     if preceding_message_type == 'sticker':
         preceding_text = preceding_message['sticker']['emoji']
@@ -97,7 +97,7 @@ def get_forwarded_message_user_intent(message):
 
 def get_original_message_user_intent(message):
     from_user = message['from']['first_name']
-    message_type = get_pretty_message_content_type(message)
+    message_type = get_pretty_message_type(message)
 
     if get_pretty_message_text(message) == '/start':
         return f':zap: _{from_user} has started using Crosstalk!_'
@@ -164,7 +164,7 @@ def get_message_thumbnail_url(message):
 
 
 def get_message_download_button_url(message):
-    message_type = get_message_content_type(message)
+    message_type = get_message_type(message)
     valid_message_types = 'audio document video voice video_note contact'.split()
 
     if message_type in valid_message_types:
@@ -208,8 +208,8 @@ def get_url_from_file_id(file_id):
     return TELEGRAM_API_BASE_FILE_URL + file_path
 
 
-def get_pretty_message_content_type(message):
-    message_type = get_message_content_type(message)
+def get_pretty_message_type(message):
+    message_type = get_message_type(message)
 
     if message_type == 'photo':
         return 'photos'
@@ -223,7 +223,7 @@ def get_pretty_message_content_type(message):
     return message_type.replace('_', ' ')
 
 
-def get_message_content_type(message):
+def get_message_type(message):
     if message.get('audio'):
         return 'audio'
     elif message.get('document'):
