@@ -2,7 +2,7 @@ from os import environ
 
 import requests
 
-from crosstalk_slack_bot import send_message
+from crosstalk_slack_bot import send_single_message, send_multiple_downloads_message
 
 DEBUG_MODE = True
 
@@ -24,8 +24,14 @@ def handle_message(message, is_edited=False):
 
     thumbnail_url = get_message_thumbnail_url(message)
     download_url = get_message_download_button_url(message)
+    multiple_downloads_urls = get_message_multiple_downloads_urls(message)
 
-    send_message(context=user_intent, text=message_text, thumbnail_url=thumbnail_url, download_url=download_url)
+    if not multiple_downloads_urls:
+        send_single_message(context=user_intent, text=message_text, thumbnail_url=thumbnail_url,
+                            download_url=download_url)
+    else:
+        send_multiple_downloads_message(context=user_intent, text=message_text,
+                                        multiple_downloads_urls=multiple_downloads_urls)
 
 
 def handle_edited_message(message):
@@ -163,6 +169,26 @@ def get_message_download_button_url(message):
         return get_url_from_file_id(message[message_type]['file_id'])
     else:
         return None
+
+
+def get_message_multiple_downloads_urls(message):
+    try:
+        photos = message['photo']
+    except KeyError:
+        return None
+
+    if not isinstance(photos, list):
+        return None
+
+    urls = []
+    for photo in photos:
+        try:
+            file_id = photo['file_id']
+            urls.append(get_url_from_file_id(file_id))
+        except KeyError:
+            continue
+
+    return urls
 
 
 def get_url_from_file_id(file_id):

@@ -6,7 +6,7 @@ from werkzeug import exceptions
 SLACK_BOT_WEBHOOK = os.environ['SLACK_BOT_WEBHOOK']
 
 
-def send_message(context, text=None, thumbnail_url=None, download_url=None):
+def send_single_message(context, text=None, thumbnail_url=None, download_url=None):
     if not text:
         text = ' '
 
@@ -103,3 +103,10 @@ def download_button_message_payload(context, text, download_url):
             }
         ]
     }
+
+
+def send_multiple_downloads_message(context, text, multiple_downloads_urls):
+    send_single_message(context=context, text=text, thumbnail_url=multiple_downloads_urls[0])
+
+    for url in multiple_downloads_urls[1:]:
+        send_single_message(context='Next photo', thumbnail_url=url)
