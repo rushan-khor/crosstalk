@@ -1,6 +1,7 @@
 import os
 
 import requests
+from werkzeug import exceptions
 
 SLACK_BOT_WEBHOOK = os.environ['SLACK_BOT_WEBHOOK']
 
@@ -17,7 +18,9 @@ def send_message(context, text=None, thumbnail_url=None, download_url=None):
         payload = plain_message_payload(context=context, text=text)
 
     r = requests.post(SLACK_BOT_WEBHOOK, json=payload)
-    print(f'Slack API responds with "{r.status_code}: {r.text}"')
+
+    if r.status_code != 200 or r.text != 'ok':
+        raise exceptions.InternalServerError(r.text)
 
 
 def plain_message_payload(context, text):
