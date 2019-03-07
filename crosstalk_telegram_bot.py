@@ -4,7 +4,7 @@ import requests
 
 from crosstalk_slack_bot import send_single_message, send_multiple_downloads_message
 
-DEBUG_MODE = True
+DEBUG_MODE = environ['DEBUG_MODE'] == 'True'
 
 TELEGRAM_BASE_URL = 'https://api.telegram.org'
 BOT_TOKEN = environ['TELEGRAM_BOT_TOKEN']
