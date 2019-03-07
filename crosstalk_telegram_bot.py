@@ -132,8 +132,8 @@ def get_original_message_user_intent(message):
 
 
 def get_pretty_message_text(message):
-    if get_message_content_type(message) == 'sticker':
-        return message['sticker']['emoji']
+    if get_message_type(message) == 'sticker':
+        return message['sticker'].get('emoji') or '🔥'
 
     return get_message_text_or_caption(message)
 
