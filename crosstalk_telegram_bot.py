@@ -106,6 +106,8 @@ def get_original_message_user_intent(message):
         return f':cookie: _{from_user} has created a new group called "{new_group_name}"!_'
     elif message.get('left_chat_member', False):
         left_user = message['left_chat_member']['first_name']
+        if left_user == from_user:
+            left_user = 'themself'
         return f':wave: _{from_user} has removed {left_user} from the group._'
     elif message.get('new_chat_members', False):
         try:
