@@ -1,33 +1,36 @@
-import logging
+from logging import StreamHandler
 from os import environ
 
 from werkzeug import http, exceptions
 from flask import Flask, jsonify, request
 
-from tele_interface import handle_message, handle_edited_message
+from tele_message_forwarder import forward_message, forward_edited_message
 
 TELE_WEBHOOK_ENDPOINT = environ['TELEGRAM_WEBHOOK_SECRET']
 
 app = Flask(__name__)
-app.logger.addHandler(logging.StreamHandler())
+app.logger.addHandler(StreamHandler())
 
 
 @app.route("/" + TELE_WEBHOOK_ENDPOINT, methods=['POST'])
 def handle_telegram_webhook():
     try:
         update = request.get_json(force=True)
+
         app.logger.info(f'New Telegram update {update}')
         handle_telegram_update(update)
+
     except exceptions.BadRequest:
         raise exceptions.BadRequest('No JSON found in Telegram update.')
+
     return jsonify({'ok': True})
 
 
 def handle_telegram_update(update):
     if 'message' in update:
-        handle_message(message=update['message'])
+        forward_message(message=update['message'])
     elif 'edited_message' in update:
-        handle_edited_message(message=update['edited_message'])
+        forward_edited_message(message=update['edited_message'])
     else:
         raise KeyError(f'No message found in Telegram update {update}.')
 
