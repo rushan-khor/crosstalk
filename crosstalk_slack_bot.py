@@ -25,6 +25,7 @@ def send_single_message(context, text=None, thumbnail_url=None, download_url=Non
 
 def plain_message_payload(context, text):
     return {
+        "text": text,
         "blocks": [
             {
                 "type": "context",
@@ -48,6 +49,7 @@ def plain_message_payload(context, text):
 
 def thumbnail_message_payload(context, text, thumbnail_url):
     return {
+        "text": text,
         "blocks": [
             {
                 "type": "context",
@@ -76,6 +78,7 @@ def thumbnail_message_payload(context, text, thumbnail_url):
 
 def download_button_message_payload(context, text, download_url):
     return {
+        "text": text,
         "blocks": [
             {
                 "type": "context",
@@ -107,6 +110,4 @@ def download_button_message_payload(context, text, download_url):
 
 def send_multiple_downloads_message(context, text, multiple_downloads_urls):
     send_single_message(context=context, text=text, thumbnail_url=multiple_downloads_urls[0])
-
-    for url in multiple_downloads_urls[1:]:
-        send_single_message(context='Next photo', thumbnail_url=url)
+    # send_single_message(context='Next photo', thumbnail_url=multiple_downloads_urls[0])
