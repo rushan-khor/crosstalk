@@ -4,22 +4,17 @@ import requests
 
 from slack_interface import send_single_message, send_multiple_downloads_message
 
-DEBUG_MODE = environ['DEBUG_MODE'] == 'True'
-
-TELEGRAM_BASE_URL = 'https://api.telegram.org'
+API_HOSTNAME = environ['TELEGRAM_API_HOSTNAME']
 BOT_TOKEN = environ['TELEGRAM_BOT_TOKEN']
-TELEGRAM_API_BASE_URL = f'{TELEGRAM_BASE_URL}/bot{BOT_TOKEN}/'
-TELEGRAM_API_BASE_FILE_URL = f'{TELEGRAM_BASE_URL}/file/bot{BOT_TOKEN}/'
+BOT_API_BASE_URL = f'{API_HOSTNAME}bot{BOT_TOKEN}/'
+BOT_FILE_PATH_BASE_URL = f'{API_HOSTNAME}/file/bot{BOT_TOKEN}/'
 
 MESSAGE_TYPE_CHECK_ORDER = 'document sticker video_note voice audio video photo'.split()
 
 
 def handle_message(message, is_edited=False):
-    if DEBUG_MODE:
-        print(message)
-
     if 'from' not in message:
-        raise KeyError(f'No from key found in Telegram message {message}.')
+        raise KeyError(f'No sender info found in Telegram message {message}.')
 
     user_intent = get_user_intent(message=message, is_edited=is_edited)
     message_text = get_pretty_message_text(message)
@@ -196,7 +191,7 @@ def get_message_multiple_downloads_urls(message):
 
 
 def get_url_from_file_id(file_id):
-    api_url = TELEGRAM_API_BASE_URL + 'getFile'
+    api_url = BOT_API_BASE_URL + 'getFile'
     r = requests.get(api_url, json={'file_id': file_id})
 
     try:
@@ -207,7 +202,7 @@ def get_url_from_file_id(file_id):
     except KeyError:
         raise KeyError(f'No file path provided for file ID: {file_id}.')
 
-    return TELEGRAM_API_BASE_FILE_URL + file_path
+    return BOT_FILE_PATH_BASE_URL + file_path
 
 
 def get_pretty_message_type(message):

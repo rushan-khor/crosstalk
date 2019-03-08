@@ -5,12 +5,13 @@ from werkzeug import exceptions
 
 from slack_payload_formatter import plain_message_payload, thumbnail_message_payload, download_button_message_payload
 
-SLACK_BOT_WEBHOOK = os.environ['SLACK_BOT_WEBHOOK']
+SLACK_APP_WEBHOOK = os.environ['SLACK_APP_WEBHOOK']
+BLANK_TEXT_FILLER = ' '
 
 
 def send_single_message(context, text=None, thumbnail_url=None, download_url=None):
     if not text:
-        text = ' '
+        text = BLANK_TEXT_FILLER
 
     if thumbnail_url:
         payload = thumbnail_message_payload(context=context, text=text, thumbnail_url=thumbnail_url)
@@ -19,7 +20,7 @@ def send_single_message(context, text=None, thumbnail_url=None, download_url=Non
     else:
         payload = plain_message_payload(context=context, text=text)
 
-    r = requests.post(SLACK_BOT_WEBHOOK, json=payload)
+    r = requests.post(SLACK_APP_WEBHOOK, json=payload)
 
     if r.status_code != 200 or r.text != 'ok':
         raise exceptions.InternalServerError(r.text)
