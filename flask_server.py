@@ -5,22 +5,22 @@ from werkzeug import http, exceptions
 
 from tele_interface import handle_message, handle_edited_message
 
-WEBHOOK_SECRET_KEY = environ['TELEGRAM_WEBHOOK_KEY']
+TELE_WEBHOOK_ENDPOINT = environ['TELE_WEBHOOK_SECRET']
 
 app = Flask(__name__)
 
 
-@app.route("/" + WEBHOOK_SECRET_KEY, methods=['POST'])
-def handle_webhook():
+@app.route("/" + TELE_WEBHOOK_ENDPOINT, methods=['POST'])
+def handle_telegram_webhook():
     try:
-        update = request.get_json()
-        handle_update(update)
+        update = request.get_json(force=True)
+        handle_telegram_update(update)
     except exceptions.BadRequest:
-        raise exceptions.BadRequest('No JSON found in Flask request.')
+        raise exceptions.BadRequest('No JSON found in Telegram update.')
     return jsonify({'ok': True})
 
 
-def handle_update(update=None):
+def handle_telegram_update(update):
     if 'message' in update:
         handle_message(message=update['message'])
     elif 'edited_message' in update:
@@ -30,7 +30,7 @@ def handle_update(update=None):
 
 
 @app.errorhandler(Exception)
-def handle_exception(unknown_exception):
+def handle_all_exceptions(unknown_exception):
     is_http_exception = isinstance(unknown_exception, exceptions.HTTPException)
 
     if is_http_exception:
