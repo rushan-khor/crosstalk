@@ -2,7 +2,7 @@ from os import environ
 
 import requests
 
-from crosstalk_slack_bot import send_single_message, send_multiple_downloads_message
+from slack_interface import send_single_message, send_multiple_downloads_message
 
 DEBUG_MODE = environ['DEBUG_MODE'] == 'True'
 

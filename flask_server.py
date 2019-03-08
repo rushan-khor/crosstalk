@@ -3,7 +3,7 @@ from os import environ
 from flask import Flask, jsonify, request
 from werkzeug import http, exceptions
 
-from crosstalk_telegram_bot import handle_message, handle_edited_message
+from tele_interface import handle_message, handle_edited_message
 
 WEBHOOK_SECRET_KEY = environ['TELEGRAM_WEBHOOK_KEY']
 
